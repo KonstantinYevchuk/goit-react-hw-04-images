@@ -1,40 +1,33 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Header, Form, Input, Button, Svg } from './Searchbar.styled';
 import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
+import { useState } from "react";
 
-export class Searchbar extends Component {
-  state = {
-    name: '',
+import { Header, Form, Input, Button, Svg } from './Searchbar.styled';
+
+export const Searchbar = ({onSubmit}) => {
+  const [name, setName] = useState('');
+  
+  const handleInput = e => {
+    setName(e.currentTarget.value.toLowerCase())
   };
-  handleInput = e => {
-    this.setState({
-        name: e.currentTarget.value.toLowerCase()
-    })
-  }
-  handleSubmit = e => {
-    const { name } = e.currentTarget.elements;
+  const handleSubmit = e => {
+    // const { name } = e.currentTarget.elements;
     e.preventDefault()
-    if(this.state.name.trim() === '') {
+    if(name.trim() === '') {
         toast.error("Please enter word in search")
     }
-    this.setState({
-        name: name.value
-    })
-    this.props.onSubmit(this.state.name)
-  }
-
-
-  render() {
+    setName(e.currentTarget.elements.name)
+    onSubmit(name)
+  };
     return ( 
        <Header>
-         <Form onSubmit={this.handleSubmit}> 
+         <Form onSubmit={handleSubmit}> 
             <Button type="submit">
             <Svg />
             </Button>
 
             <Input 
-            onChange={this.handleInput}
+            onChange={handleInput}
             className="input"
             name="name"
             type="text"
@@ -45,7 +38,7 @@ export class Searchbar extends Component {
           </Form>
         </Header>
     );
-  }
+  
 }
 
 Searchbar.propTypes = {
